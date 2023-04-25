@@ -1,3 +1,7 @@
+const socket = io();
+
+socket.on('message', ({ author, content }) => addMessage(author, content))
+
 // Referencje do elementów HTML
 const loginForm = document.getElementById('welcome-form');
 const messagesSection = document.getElementById('messages-section');
@@ -34,13 +38,16 @@ function sendMessage(e) {
   let messageContent = messageContentInput.value;
 
   // Walidacja
-  if(!messageContent) {
+  if(!messageContent.length) {
     alert('Please enter your message');
     return;
   }
 
   // Wywołanie funkcji addMessage
   addMessage(userName, messageContent)
+
+  // Przekazanie wiadomości do serwera
+  socket.emit('message', { author: userName, content: messageContent })
 
   // Czyszczenie pola tekstowego
   messageContentInput.value = '';
@@ -60,10 +67,6 @@ function addMessage(author, content) {
   messagesList.appendChild(message);
 };
 
-
-
-
 // Nasłuchiwanie submit na formularzach 
 loginForm.addEventListener('submit', login);
 addMessageForm.addEventListener('submit', sendMessage);
-
