@@ -29,6 +29,8 @@ function login(e) {
   // Ukrycie formularza logowania i pokazanie sekcji z wiadomościami 
   loginForm.classList.remove('show');
   messagesSection.classList.add('show');
+
+  socket.emit('join', userName);
 };
 
 // Funkcja obsługująca formularz wiadomości
